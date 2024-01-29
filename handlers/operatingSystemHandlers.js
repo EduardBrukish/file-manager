@@ -58,5 +58,4 @@ export const handleUserOperationSystem = (osArguments) => {
     default:
       console.log('Sorry, you used invalid argument for Operating System cmdlet')
   } 
-
 }

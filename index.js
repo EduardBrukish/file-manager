@@ -2,6 +2,8 @@ import { argv } from 'node:process'
 import readlinePromises from 'node:readline/promises'
 import { homedir } from 'os'
 import { handleUserOperationSystem } from './handlers/operatingSystemHandlers.js'
+import { handleUserBasicOperation } from './handlers/basicOperationHandlers.js'
+import { BASIC_OPERATIONS } from './utils/constants.js'
 
 const getUserName = (commandLineArguments) => {
   const [ userNameArgument ] = commandLineArguments.splice(2)
@@ -9,12 +11,18 @@ const getUserName = (commandLineArguments) => {
   return userName
 }
 
-const handleUserInput = (userInput) => {
+const handleUserInput = async (userInput, currentDirectory) => {
   const [operationType, ...args] = userInput.trim().split(/\s+/g)
 
   switch (operationType) {
     case 'os':
       handleUserOperationSystem(args)
+      break
+    case BASIC_OPERATIONS[operationType]:
+      await handleUserBasicOperation(operationType, args, currentDirectory)
+      break
+    case '.exit':
+      process.exit(1);
       break
     default:
       console.log()
@@ -37,19 +45,16 @@ const initFileManagerApp = async () => {
     output: process.stdout,
   })
 
-  return new Promise((resolve, reject) => {
-
-    rl.on(`line`, (line) => {
-      handleUserInput(line)
-      console.log(`You are currently in ${currentDirectory}`)
-    })
-
-    rl.on('close', () => {
-      console.log(`Thank you for using File Manager, ${userName}, goodbye!\n`)
-    })
-
-    rl.on('error', () => console.log('By by my darling'))
+  rl.on(`line`, async (line) => {
+    await handleUserInput(line, currentDirectory)
+    console.log(`You are currently in ${currentDirectory}`)
   })
+
+  rl.on('close', () => {
+    console.log(`Thank you for using File Manager, ${userName}, goodbye!\n`)
+  })
+
+  rl.on('error', () => console.log('By by my darling'))
 }
 
 await initFileManagerApp()
