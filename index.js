@@ -1,9 +1,10 @@
 import { argv } from 'node:process'
 import readlinePromises from 'node:readline/promises'
-import { homedir } from 'os'
 import { handleUserOperationSystem } from './handlers/operatingSystemHandlers.js'
 import { handleUserBasicOperation } from './handlers/basicOperationHandlers.js'
-import { BASIC_OPERATIONS } from './utils/constants.js'
+import { handleNavigationOperation } from './handlers/handleNavigationOperation.js'
+import { BASIC_OPERATIONS, NAVIGATION_OPERATIONS } from './utils/constants.js'
+import { colorText } from './utils/colorTextUtils.js'
 
 // ToDO delete it after move logic
 import { fileURLToPath } from 'url'
@@ -15,7 +16,7 @@ const getUserName = (commandLineArguments) => {
   return userName
 }
 
-const handleUserInput = async (userInput, currentDirectory) => {
+const handleUserInput = async (userInput, currentDirectory, readLine) => {
   const [operationType, ...args] = userInput.trim().split(/\s+/g)
 
   try {
@@ -26,8 +27,11 @@ const handleUserInput = async (userInput, currentDirectory) => {
       case BASIC_OPERATIONS[operationType]:
         await handleUserBasicOperation(operationType, args, currentDirectory)
         break
+      case NAVIGATION_OPERATIONS[operationType]:
+        handleNavigationOperation(operationType, args, currentDirectory)
+        break
       case '.exit':
-        process.exit(1);
+        readLine.close();
         break
       default:
         console.log('Check please your input')
@@ -49,8 +53,8 @@ const initFileManagerApp = async () => {
     throw new Error(errorMessage)
   }
 
-  console.log(`Welcome to the File Manager, ${userName}! \n`)
-  console.log(`You are currently in ${dirPath}`)
+  console.log(colorText(`Welcome to the File Manager, ${userName}! \n`, 'green'))
+  console.log(colorText(`You are currently in ${dirPath}`, 'cyan'))
 
   const rl = readlinePromises.createInterface({
     input: process.stdin,
@@ -58,8 +62,8 @@ const initFileManagerApp = async () => {
   })
 
   rl.on(`line`, async (line) => {
-    await handleUserInput(line, dirPath)
-    console.log(`You are currently in ${dirPath}`)
+    console.log(colorText(`\nYou are currently in ${dirPath} \n`, 'cyan'))
+    await handleUserInput(line, dirPath, rl)
   })
 
   rl.on('close', () => {

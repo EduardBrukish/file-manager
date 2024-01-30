@@ -1,7 +1,8 @@
-import { rm, writeFile, readFile, rename } from 'fs/promises'
+import { rm, writeFile, rename } from 'fs/promises'
 import { createReadStream, createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { join } from 'path'
+import { printRedErrorText } from '../utils/colorTextUtils.js'
 
 const deleteFile = async (currentDirectoryPath, deleteFileArguments) => {
   try {
@@ -10,7 +11,7 @@ const deleteFile = async (currentDirectoryPath, deleteFileArguments) => {
 
     await rm(filePathToDelete)
   } catch {
-    console.log('Error occurred during delete operation. Check please command params')
+    printRedErrorText('Error occurred during delete operation. Check please command params')
   }
 }
 
@@ -19,7 +20,7 @@ const createFile = async (currentDirectoryPath, createFileArguments) => {
     const [fileName] = createFileArguments
 
     if(!fileName) {
-      console.log('Invalid file name')
+      printRedErrorText('Invalid file name')
       return
     }
 
@@ -27,7 +28,7 @@ const createFile = async (currentDirectoryPath, createFileArguments) => {
   
     await writeFile(filePathToCreate, '', { flag: 'wx'})
   } catch {
-    console.log('Error during file creation')
+    printRedErrorText('Error during file creation')
   }
 }
 
@@ -48,7 +49,7 @@ const copyFile = async (currentDirectoryPath, copyFileArguments) => {
 
     await pipeline(readStream, writeStream)
   } catch {
-    console.log('Invalid arguments to copy file')
+    printRedErrorText('Invalid arguments to copy file')
   }
 }
 
@@ -77,7 +78,7 @@ const readFileByPath = async (currentDirectoryPath, readFileArguments) => {
 
     process.stdout.write(fileData)
   } catch {
-    console.log('Error occurred during read file operation. Check please command params')
+    printRedErrorText('Error occurred during read file operation. Check please command params')
   }
 };
 
@@ -89,7 +90,7 @@ const renameFile = async (currentDirectoryPath, renameFileArguments) => {
 
     await rename(fileToRenamePath, properFileNamePath)
   } catch {
-    console.log('Error occurred during read file operation. Check please command params')
+    printRedErrorText('Error occurred during read file operation. Check please command params')
   }
 };
 
@@ -98,7 +99,7 @@ const moveFile = async (currentDirectoryPath, moveFileArguments) => {
     await copyFile(currentDirectoryPath, moveFileArguments)
     await deleteFile(currentDirectoryPath, moveFileArguments)
   } catch {
-    console.log('Error occurred during move file operation. Check please command params')
+    printRedErrorText('Error occurred during move file operation. Check please command params')
   }  
 }
 
