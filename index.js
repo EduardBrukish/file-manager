@@ -1,10 +1,8 @@
 import { argv } from 'node:process'
 import readlinePromises from 'node:readline/promises'
-import { handleUserOperationSystem } from './handlers/operatingSystemHandlers.js'
-import { handleUserBasicOperation } from './handlers/basicOperationHandlers.js'
-import { handleNavigationOperation } from './handlers/handleNavigationOperation.js'
-import { BASIC_OPERATIONS, NAVIGATION_OPERATIONS } from './utils/constants.js'
 import { colorText } from './utils/colorTextUtils.js'
+import { printCurrentWorkingDirectory } from './utils/pathUtils.js'
+import { handleUserInput } from './handlers/rootHandler.js'
 
 // ToDO delete it after move logic
 import { fileURLToPath } from 'url'
@@ -14,31 +12,6 @@ const getUserName = (commandLineArguments) => {
   const [ userNameArgument ] = commandLineArguments.splice(2)
   const userName = userNameArgument && userNameArgument.replace('--', '')
   return userName
-}
-
-const handleUserInput = async (userInput, currentDirectory, readLine) => {
-  const [operationType, ...args] = userInput.trim().split(/\s+/g)
-
-  try {
-    switch (operationType) {
-      case 'os':
-        handleUserOperationSystem(args)
-        break
-      case BASIC_OPERATIONS[operationType]:
-        await handleUserBasicOperation(operationType, args, currentDirectory)
-        break
-      case NAVIGATION_OPERATIONS[operationType]:
-        handleNavigationOperation(operationType, args, currentDirectory)
-        break
-      case '.exit':
-        readLine.close();
-        break
-      default:
-        console.log('Check please your input')
-    }
-  } catch {
-    console.log('Check please your input')
-  }
 }
 
 const initFileManagerApp = async () => {
@@ -54,16 +27,18 @@ const initFileManagerApp = async () => {
   }
 
   console.log(colorText(`Welcome to the File Manager, ${userName}! \n`, 'green'))
-  console.log(colorText(`You are currently in ${dirPath}`, 'cyan'))
+  printCurrentWorkingDirectory()
 
   const rl = readlinePromises.createInterface({
     input: process.stdin,
     output: process.stdout,
   })
 
+  process.chdir(dirPath)
+
   rl.on(`line`, async (line) => {
-    console.log(colorText(`\nYou are currently in ${dirPath} \n`, 'cyan'))
     await handleUserInput(line, dirPath, rl)
+    printCurrentWorkingDirectory()
   })
 
   rl.on('close', () => {

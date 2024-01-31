@@ -18,6 +18,6 @@ export const COLORS = {
   green: '\u001b[32m',
   yellow: '\u001b[33m',
   blue: '\u001b[34m',
-  'cyan': '\u001b[36m',
+  cyan: '\u001b[36m',
   white: '\u001b[37m'
 }

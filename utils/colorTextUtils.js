@@ -3,7 +3,7 @@ import { COLORS } from './constants.js'
 export const colorText = (text, color) => {
   const colorToPrint = COLORS[color]
   const colorToUse = colorToPrint || COLORS.white
-console.log(colorToUse)
+
   return `${colorToUse}${text}\u001b[0m`
 }
 
