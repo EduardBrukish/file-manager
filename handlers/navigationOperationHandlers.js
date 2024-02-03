@@ -50,7 +50,7 @@ const printFolderContent = async () => {
       })
       .map((file) => ({ Name: file.name, Type: file.isFile ? 'file' : 'directory'}))
 
-      console.table(result)
+    console.table(result)
   } catch (e) {
     console.log(e)
     printRedErrorText("Error occurred during reading folder structure")
@@ -73,7 +73,6 @@ export const handleNavigationOperation = async (operationType, navigationOperati
         console.log('Sorry, you used invalid argument for Navigation Operation cmdlet')
     } 
   } catch (e) {
-    console.log(e)
     console.log('Error occurred for Navigation Operation cmdlet')
   }
 }

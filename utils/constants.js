@@ -13,6 +13,11 @@ export const NAVIGATION_OPERATIONS = {
   ls: 'ls',
 }
 
+export const ZIP_OPERATIONS = {
+  compress: 'compress',
+  decompress: 'decompress',
+}
+
 export const COLORS = {
   red: '\u001b[31m',
   green: '\u001b[32m',

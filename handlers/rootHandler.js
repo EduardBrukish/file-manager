@@ -2,7 +2,8 @@ import { handleUserOperationSystem } from './operatingSystemHandlers.js'
 import { handleUserBasicOperation } from './basicOperationHandlers.js'
 import { handleNavigationOperation } from './navigationOperationHandlers.js'
 import { calculateHash } from './hashOperationHandlers.js'
-import { BASIC_OPERATIONS, NAVIGATION_OPERATIONS } from '../utils/constants.js'
+import { handleZipOperation } from './zipOperationHandlers.js'
+import { BASIC_OPERATIONS, NAVIGATION_OPERATIONS, ZIP_OPERATIONS } from '../utils/constants.js'
 
 export const handleUserInput = async (userInput, currentDirectory, readLine) => {
   const [operationType, ...args] = userInput.trim().split(/\s+/g)
@@ -17,6 +18,9 @@ export const handleUserInput = async (userInput, currentDirectory, readLine) => 
         break
       case NAVIGATION_OPERATIONS[operationType]:
         await handleNavigationOperation(operationType, args, currentDirectory)
+        break
+      case ZIP_OPERATIONS[operationType]:
+        await handleZipOperation(operationType, args)
         break
       case 'hash':
         await calculateHash(args)
