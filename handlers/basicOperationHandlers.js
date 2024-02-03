@@ -34,21 +34,21 @@ const createFile = async (currentDirectoryPath, createFileArguments) => {
 
 const copyFile = async (currentDirectoryPath, copyFileArguments) => {
   try {
-    const [fileNameToCopy, destinationFileName] = copyFileArguments
+    const [fileNameToCopy, destinationFolderName] = copyFileArguments
 
-    if(!fileNameToCopy || !destinationFileName) {
+    if(!fileNameToCopy || !destinationFolderName) {
       printErrorText('Invalid arguments to copy file')
       return
     }
 
     const filePathToCopy = join(currentDirectoryPath, fileNameToCopy)
-    const destinationFilePath = join(currentDirectoryPath, destinationFileName)
+    const destinationFilePath = join(currentDirectoryPath, destinationFolderName, fileNameToCopy)
 
     const readStream = createReadStream(filePathToCopy, { encoding: 'utf8' })
     const writeStream = createWriteStream(destinationFilePath)
 
     await pipeline(readStream, writeStream)
-  } catch {
+  } catch (e) {
     printErrorText('Invalid arguments to copy file')
   }
 }

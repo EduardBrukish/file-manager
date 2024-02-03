@@ -48,7 +48,7 @@ const printFolderContent = async () => {
         return 0
 
       })
-      .map((file) => ({ Name: file.name, Type: file.isFile ? 'file' : 'directory'}))
+      .map((file) => ({ Name: file.name, Type: file.isFile() ? 'file' : 'directory'}))
 
     console.table(result)
   } catch {
