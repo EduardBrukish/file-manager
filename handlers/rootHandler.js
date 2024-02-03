@@ -1,11 +1,12 @@
 import { handleUserOperationSystem } from './operatingSystemHandlers.js'
 import { handleUserBasicOperation } from './basicOperationHandlers.js'
 import { handleNavigationOperation } from './navigationOperationHandlers.js'
+import { calculateHash } from './hashOperationHandlers.js'
 import { BASIC_OPERATIONS, NAVIGATION_OPERATIONS } from '../utils/constants.js'
 
 export const handleUserInput = async (userInput, currentDirectory, readLine) => {
   const [operationType, ...args] = userInput.trim().split(/\s+/g)
-console.log('operationType', operationType)
+
   try {
     switch (operationType) {
       case 'os':
@@ -16,6 +17,9 @@ console.log('operationType', operationType)
         break
       case NAVIGATION_OPERATIONS[operationType]:
         await handleNavigationOperation(operationType, args, currentDirectory)
+        break
+      case 'hash':
+        await calculateHash(args)
         break
       case '.exit':
         readLine.close();
