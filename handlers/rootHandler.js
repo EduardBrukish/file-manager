@@ -29,9 +29,9 @@ export const handleUserInput = async (userInput, currentDirectory, readLine) => 
         readLine.close();
         break
       default:
-        console.log('Check please your input')
+        printErrorText('Please check your input. You used wrong cmdlet')
     }
   } catch {
-    console.log('Check please your input')
+    printErrorText('Please check your input')
   }
 }

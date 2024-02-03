@@ -7,6 +7,6 @@ export const colorText = (text, color) => {
   return `${colorToUse}${text}\u001b[0m`
 }
 
-export const printRedErrorText = (text) => {
+export const printErrorText = (text) => {
   console.log(colorText(text, 'red'))
 }

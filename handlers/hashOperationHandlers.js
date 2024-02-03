@@ -3,7 +3,7 @@ import { cwd } from 'node:process'
 import { createHash } from 'node:crypto'
 import { pipeline } from 'node:stream/promises'
 import { join } from 'path'
-import { printRedErrorText } from '../utils/colorTextUtils.js'
+import { printErrorText } from '../utils/colorTextUtils.js'
 
 export const calculateHash = async (fileArguments) => {
   try {
@@ -18,6 +18,6 @@ export const calculateHash = async (fileArguments) => {
 
     console.log(hash.digest('hex'))
   } catch (e) {
-    printRedErrorText("Failed to create hash. Please check your path")
+    printErrorText("Failed to create hash. Please check your path")
   }
 }

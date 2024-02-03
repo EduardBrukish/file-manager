@@ -4,7 +4,7 @@ import { createBrotliCompress, createBrotliDecompress } from 'node:zlib'
 import { join } from 'path'
 import { pipeline } from 'node:stream/promises';
 import { createReadStream, createWriteStream } from 'node:fs'
-import { printRedErrorText } from '../utils/colorTextUtils.js'
+import { printErrorText } from '../utils/colorTextUtils.js'
 
 const compressFile = async (compressArguments) => {
   try {
@@ -19,7 +19,7 @@ const compressFile = async (compressArguments) => {
 
     await pipeline(source, gzip, destination)
   } catch {
-    printRedErrorText("Failed to compress file. Please check your arguments")
+    printErrorText("Failed to compress file. Please check your arguments")
   }
 };
 
@@ -36,7 +36,7 @@ const decompressFile = async (decompressArguments) => {
 
     await pipeline(source, unzip, destination)
   } catch {
-    printRedErrorText("Failed to decompress file. Please check your arguments")
+    printErrorText("Failed to decompress file. Please check your arguments")
   }
 }
 
@@ -50,9 +50,9 @@ export const handleZipOperation = async (operationType, zipOperationArguments) =
         await decompressFile(zipOperationArguments)
         break
       default:
-        console.log('Sorry, you used invalid argument for Zip Operation cmdlet')
+        printErrorText('Sorry, you used invalid argument for Zip Operation cmdlet')
     } 
   } catch (e) {
-    console.log('Error occurred for Zip Operation cmdlet')
+    printErrorText('Error occurred for Zip Operation cmdlet')
   }
 }

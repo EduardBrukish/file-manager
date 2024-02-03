@@ -1,4 +1,5 @@
 import { homedir, userInfo, cpus, EOL, arch } from 'os'
+import { printErrorText } from '../utils/colorTextUtils.js'
 
 const printUserEOL = () => {
   console.log(`Your EOL: ${JSON.stringify(EOL)}`)
@@ -27,7 +28,7 @@ const printUserName = () => {
     const {username} = currentUserInfo
     console.log(`User name: ${username.username}`)
   } catch (e) {
-    console.log('Error occurred for Operating System operator')
+    printErrorText('Error occurred for Operating System operator')
   }
 }
 
@@ -56,6 +57,6 @@ export const handleUserOperationSystem = (osArguments) => {
       printUserMachineCpuArchitecture()
       break
     default:
-      console.log('Sorry, you used invalid argument for Operating System cmdlet')
+      printErrorText('Sorry, you used invalid argument for Operating System cmdlet')
   } 
 }

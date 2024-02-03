@@ -2,7 +2,7 @@ import { rm, writeFile, rename } from 'fs/promises'
 import { createReadStream, createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { join } from 'path'
-import { printRedErrorText } from '../utils/colorTextUtils.js'
+import { printErrorText } from '../utils/colorTextUtils.js'
 
 const deleteFile = async (currentDirectoryPath, deleteFileArguments) => {
   try {
@@ -11,7 +11,7 @@ const deleteFile = async (currentDirectoryPath, deleteFileArguments) => {
 
     await rm(filePathToDelete)
   } catch {
-    printRedErrorText('Error occurred during delete operation. Check please command params')
+    printErrorText('Error occurred during delete operation. Check please command params')
   }
 }
 
@@ -20,7 +20,7 @@ const createFile = async (currentDirectoryPath, createFileArguments) => {
     const [fileName] = createFileArguments
 
     if(!fileName) {
-      printRedErrorText('Invalid file name')
+      printErrorText('Invalid file name')
       return
     }
 
@@ -28,7 +28,7 @@ const createFile = async (currentDirectoryPath, createFileArguments) => {
   
     await writeFile(filePathToCreate, '', { flag: 'wx'})
   } catch {
-    printRedErrorText('Error during file creation')
+    printErrorText('Error during file creation')
   }
 }
 
@@ -37,7 +37,7 @@ const copyFile = async (currentDirectoryPath, copyFileArguments) => {
     const [fileNameToCopy, destinationFileName] = copyFileArguments
 
     if(!fileNameToCopy || !destinationFileName) {
-      console.log('Invalid arguments to copy file')
+      printErrorText('Invalid arguments to copy file')
       return
     }
 
@@ -49,7 +49,7 @@ const copyFile = async (currentDirectoryPath, copyFileArguments) => {
 
     await pipeline(readStream, writeStream)
   } catch {
-    printRedErrorText('Invalid arguments to copy file')
+    printErrorText('Invalid arguments to copy file')
   }
 }
 
@@ -78,7 +78,7 @@ const readFileByPath = async (currentDirectoryPath, readFileArguments) => {
 
     process.stdout.write(fileData)
   } catch {
-    printRedErrorText('Error occurred during read file operation. Check please command params')
+    printErrorText('Error occurred during read file operation. Check please command params')
   }
 };
 
@@ -90,7 +90,7 @@ const renameFile = async (currentDirectoryPath, renameFileArguments) => {
 
     await rename(fileToRenamePath, properFileNamePath)
   } catch {
-    printRedErrorText('Error occurred during read file operation. Check please command params')
+    printErrorText('Error occurred during read file operation. Check please command params')
   }
 };
 
@@ -99,7 +99,7 @@ const moveFile = async (currentDirectoryPath, moveFileArguments) => {
     await copyFile(currentDirectoryPath, moveFileArguments)
     await deleteFile(currentDirectoryPath, moveFileArguments)
   } catch {
-    printRedErrorText('Error occurred during move file operation. Check please command params')
+    printErrorText('Error occurred during move file operation. Check please command params')
   }  
 }
 
@@ -125,9 +125,9 @@ export const handleUserBasicOperation = async (operationType, basicOperationArgu
         await deleteFile(currentDirectoryPath, basicOperationArguments)
         break
       default:
-        console.log('Sorry, you used invalid argument for Basic Operation cmdlet')
+        printErrorText('Sorry, you used invalid argument for Basic Operation cmdlet')
     } 
   } catch {
-    console.log('Error occurred for Basic Operation cmdlet')
+    printErrorText('Error occurred for Basic Operation cmdlet')
   }
 }

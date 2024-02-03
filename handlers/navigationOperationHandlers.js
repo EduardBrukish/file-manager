@@ -1,7 +1,7 @@
 import { chdir, cwd } from 'node:process'
 import { dirname, normalize } from 'path'
 import { readdir } from 'node:fs/promises';
-import { printRedErrorText } from '../utils/colorTextUtils.js'
+import { printErrorText } from '../utils/colorTextUtils.js'
 
 const goFolderUp = () => {
   try {
@@ -10,7 +10,7 @@ const goFolderUp = () => {
     
     chdir(parentDirectoryPath)
   } catch {
-    printRedErrorText("You can't go upper")
+    printErrorText("You can't go upper")
   }
 }
 
@@ -21,7 +21,7 @@ const navigateToFolder = (navigationOperationArguments) => {
     
     chdir(destinationFolderPath)
   } catch {
-    printRedErrorText("Please check your path")
+    printErrorText("Please check your path")
   }
 }
 
@@ -51,9 +51,8 @@ const printFolderContent = async () => {
       .map((file) => ({ Name: file.name, Type: file.isFile ? 'file' : 'directory'}))
 
     console.table(result)
-  } catch (e) {
-    console.log(e)
-    printRedErrorText("Error occurred during reading folder structure")
+  } catch {
+    printErrorText("Error occurred during reading folder structure")
   }
 }
 
@@ -70,9 +69,9 @@ export const handleNavigationOperation = async (operationType, navigationOperati
         await printFolderContent()
         break
       default:
-        console.log('Sorry, you used invalid argument for Navigation Operation cmdlet')
+        printErrorText('Sorry, you used invalid argument for Navigation Operation cmdlet')
     } 
   } catch (e) {
-    console.log('Error occurred for Navigation Operation cmdlet')
+    printErrorText('Error occurred for Navigation Operation cmdlet')
   }
 }
