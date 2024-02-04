@@ -25,8 +25,8 @@ const printUserHomeDirectory = () => {
 const printUserName = () => {
   try {
     const currentUserInfo = userInfo()
-    const {username} = currentUserInfo
-    console.log(`User name: ${username.username}`)
+    const { username } = currentUserInfo
+    console.log(`User name: ${username}`)
   } catch (e) {
     printErrorText('Error occurred for Operating System operator')
   }

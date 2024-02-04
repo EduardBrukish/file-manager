@@ -1,7 +1,7 @@
 import { rm, writeFile, rename } from 'fs/promises'
 import { createReadStream, createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
-import { join } from 'path'
+import { join, resolve } from 'path'
 import { printErrorText } from '../utils/colorTextUtils.js'
 
 const deleteFile = async (currentDirectoryPath, deleteFileArguments) => {
@@ -42,7 +42,8 @@ const copyFile = async (currentDirectoryPath, copyFileArguments) => {
     }
 
     const filePathToCopy = join(currentDirectoryPath, fileNameToCopy)
-    const destinationFilePath = join(currentDirectoryPath, destinationFolderName, fileNameToCopy)
+    const absoluteDestinationFolderPath = resolve(currentDirectoryPath, destinationFolderName)
+    const destinationFilePath = join(absoluteDestinationFolderPath, fileNameToCopy)
 
     const readStream = createReadStream(filePathToCopy, { encoding: 'utf8' })
     const writeStream = createWriteStream(destinationFilePath)
